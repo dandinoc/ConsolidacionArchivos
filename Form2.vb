@@ -4,13 +4,13 @@ Imports System.Text.Json
 
 Public Class Form2
     'ruta de origen de creacion de archivos
-    Dim rutaArchivoOrigen As String = "C:\Users\dandinoc\Documents\Nueva carpeta\"
+    Dim rutaArchivoOrigen As String = "\\10.130.65.147\ImportExport\LaColonia\SalidasAuto\"
     'ruta de salida de cara a cliente
-    Dim rutasalida As String = "C:\Users\dandinoc\Documents\Nueva carpeta\salida\"
+    Dim rutasalida As String = "\\10.130.65.147\ImportExport\LaColonia\Salidas\"
     'ruta de salida de archivo consolidado de cara a cliente
     Dim rutaconsolidad As String = rutasalida '"C:\Users\dandinoc\Documents\Nueva carpeta\salida\consolidado\"
     'ruta de respaldo de archivos originales
-    Dim rutaBackup As String = "C:\Users\dandinoc\Documents\Nueva carpeta\salida\backup\"
+    Dim rutaBackup As String = "\\10.130.65.147\ImportExport\LaColonia\Salidas\Backup\"
     'nombre de archivos buscados
     Dim nombreFichero As String = "SEGALCOCE*.txt"
     'lista de archivos
@@ -37,7 +37,7 @@ Public Class Form2
 
     Private Sub Form2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Button3_Click(Me, EventArgs.Empty)
-
+        'Timer1.Start()
     End Sub
 
     Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
@@ -52,10 +52,11 @@ Public Class Form2
         Dim path2pesalidaauto As String = rutasalida + archivoImportar
         'arcivo destino backup
         Dim path2pesalidaBackup As String = rutaBackup + archivoImportar
+        'mover el fichero a destino backup
+        My.Computer.FileSystem.MoveFile(pathpesalidaauto, path2pesalidaBackup)
         'mover el fichero a destino salida
-        My.Computer.FileSystem.MoveFile(pathpesalidaauto, path2pesalidaauto)
-        ''mover el fichero a destino backup
-        My.Computer.FileSystem.MoveFile(path2pesalidaauto, path2pesalidaBackup)
+        My.Computer.FileSystem.CopyFile(path2pesalidaBackup, path2pesalidaauto)
+
 
         'refrescar la lista de archivos en pantalla
         Button3_Click(Me, EventArgs.Empty)
@@ -84,7 +85,9 @@ Public Class Form2
                         'si se llega a la linea buscada
                         If ContLineas = lineaBuscada Then
                             'guardar valor buscado dentro de la lista de datos
-                            listaArchivos.Add(New Listado With {.ORDEN = linea.Substring(posicionInicial - 1, longitudValor), .FICHERO = archivo.Substring(archivo.LastIndexOf("\") + 1).ToString})
+                            listaArchivos.Add(New Listado With {.ORDEN = linea.Substring(posicionInicial - 1, longitudValor),
+                                              .COMENTARIO = linea.Substring(32, 27),
+                                              .FICHERO = archivo.Substring(archivo.LastIndexOf("\") + 1).ToString})
                             Exit While
                         End If
                     End While
@@ -117,7 +120,6 @@ Public Class Form2
                 If i = 0 Then
                     archivoConsolidacion1 = rutaArchivoOrigen + listaValoresSeleccionados(i)
                     archivo1 = listaValoresSeleccionados(i)
-
                 Else
                     archivoConsolidacion2 = rutaArchivoOrigen + listaValoresSeleccionados(i)
                     archivo2 = listaValoresSeleccionados(i)
@@ -196,6 +198,10 @@ Public Class Form2
     Private Sub PictureBox1_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
         'llamado a cierre de aplicacion
         Me.Close()
+    End Sub
+
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        Button3_Click(Me, EventArgs.Empty)
     End Sub
 End Class
 

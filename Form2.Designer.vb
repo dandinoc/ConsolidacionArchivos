@@ -22,6 +22,7 @@ Partial Class Form2
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        components = New ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form2))
         DataGridView1 = New DataGridView()
         Button1 = New Button()
@@ -31,6 +32,7 @@ Partial Class Form2
         ListBox1 = New ListBox()
         ListBox2 = New ListBox()
         PictureBox1 = New PictureBox()
+        Timer1 = New Timer(components)
         CType(DataGridView1, ComponentModel.ISupportInitialize).BeginInit()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
@@ -119,6 +121,10 @@ Partial Class Form2
         PictureBox1.TabIndex = 7
         PictureBox1.TabStop = False
         ' 
+        ' Timer1
+        ' 
+        Timer1.Interval = 300000
+        ' 
         ' Form2
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -151,4 +157,5 @@ Partial Class Form2
     Friend WithEvents ListBox1 As ListBox
     Friend WithEvents ListBox2 As ListBox
     Friend WithEvents PictureBox1 As PictureBox
+    Friend WithEvents Timer1 As Timer
 End Class
